@@ -1,0 +1,154 @@
+# **📌 Enunciado: CRUD de Usuarios en Spring Boot**
+## **1️⃣ Descripción del proyecto**
+Vas a desarrollar una API REST para gestionar usuarios en una base de datos. La API permitirá **crear, leer, actualizar y eliminar usuarios (CRUD)**. Los datos de los usuarios se almacenarán en una base de datos H2 en memoria (para pruebas) o en MySQL (opcional).
+
+---
+
+## **2️⃣ Requisitos**
+### 📂 **Estructura del proyecto**
+Tu aplicación Spring Boot debe seguir esta organización:
+
+```
+src/main/java/com/example/demo
+ ├── DemoApplication.java  <-- Clase principal
+ ├── controller/           <-- Controlador REST
+ │   ├── UserController.java
+ ├── model/                <-- Clase de entidad
+ │   ├── User.java
+ ├── repository/           <-- Interfaz para acceder a la BD
+ │   ├── UserRepository.java
+ ├── service/              <-- Lógica de negocio
+ │   ├── UserService.java
+```
+
+---
+
+### 🔹 **Entidad `User` (model)**
+La entidad `User` debe representar a un usuario con los siguientes atributos:
+
+| Atributo | Tipo de Dato | Descripción |
+|----------|-------------|-------------|
+| `id` | `Long` | Identificador único (autoincremental) |
+| `name` | `String` | Nombre del usuario |
+| `email` | `String` | Correo electrónico (único) |
+| `age` | `int` | Edad del usuario |
+
+📌 **Notas:**
+- La clase `User` debe usar **JPA (`@Entity`)** para mapear la tabla en la base de datos.
+- `id` debe ser una **clave primaria autoincremental** (`@Id @GeneratedValue`).
+- `email` debe ser **único**.
+
+---
+
+### 🔹 **Interfaz `UserRepository` (repository)**
+Crea una **interfaz** `UserRepository` que extienda de `JpaRepository<User, Long>`.  
+Spring Boot **se encargará automáticamente** de las operaciones básicas de la base de datos.
+
+---
+
+### 🔹 **Clase `UserService` (service)**
+La clase `UserService` debe manejar la lógica de negocio:  
+- **Obtener todos los usuarios.**
+- **Obtener un usuario por ID.**
+- **Crear un usuario (validando que el email sea único).**
+- **Actualizar un usuario.**
+- **Eliminar un usuario.**
+
+---
+
+### 🔹 **Controlador `UserController` (controller)**
+Crea una clase `UserController` que maneje las peticiones HTTP (`GET`, `POST`, `PUT`, `DELETE`).
+
+📌 **Endpoints de la API:**
+
+| Método | URL | Descripción |
+|--------|-----|-------------|
+| `GET`  | `/users` | Obtener todos los usuarios |
+| `GET`  | `/users/{id}` | Obtener usuario por ID |
+| `POST` | `/users` | Crear un usuario |
+| `PUT`  | `/users/{id}` | Actualizar un usuario |
+| `DELETE` | `/users/{id}` | Eliminar un usuario |
+
+---
+
+## **3️⃣ Pistas y recursos**
+Aquí tienes una **guía de pasos** para ayudarte a hacer cada parte. Puedes consultarla cuando necesites ayuda.
+
+### 🔹 **Paso 1: Configurar el proyecto**
+- Asegúrate de tener estas dependencias en tu `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+- **Configura la base de datos en `application.properties`** (si usas H2):
+```properties
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+```
+Esto activa la **consola H2 en `http://localhost:8080/h2-console`** para ver la base de datos.
+
+📌 **Alternativa:** Si quieres usar MySQL en vez de H2, dime y te paso la configuración.
+
+---
+
+### 🔹 **Paso 2: Crear la entidad `User`**
+📖 **Referencia sobre `@Entity` y JPA:**  
+🔗 [Documentación oficial de Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+
+---
+
+### 🔹 **Paso 3: Crear `UserRepository`**
+📖 **Referencia sobre `JpaRepository`:**  
+🔗 [Guía oficial de Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories)
+
+---
+
+### 🔹 **Paso 4: Crear `UserService`**
+📖 **Referencia sobre servicios en Spring Boot:**  
+🔗 [Spring Boot Services & Components](https://spring.io/guides/gs/rest-service/)
+
+---
+
+### 🔹 **Paso 5: Crear `UserController`**
+📖 **Referencia sobre controladores REST en Spring Boot:**  
+🔗 [Guía de Spring Boot REST Controllers](https://spring.io/guides/gs/rest-service/)
+
+📌 **Para probar la API**, usa **Postman** o ejecuta en la terminal:
+```sh
+curl -X GET http://localhost:8080/users
+```
+
+---
+
+## **📌 4️⃣ Entregable final**
+Una vez que completes el CRUD, debes poder:
+✅ **Crear, leer, actualizar y eliminar usuarios.**  
+✅ **Probar los endpoints con Postman o cURL.**  
+✅ **Ver los datos en la consola H2 (`http://localhost:8080/h2-console`).**  
+
+---
+
+## **📌 5️⃣ Extra (Opcional)**
+Si te sientes con ganas de más, puedes mejorar la API:
+- **Validar los datos del usuario** (`@Valid`, `@NotNull`, `@Email`).
+- **Manejar excepciones personalizadas** (`@ExceptionHandler`).
+- **Añadir paginación y ordenación** (`Pageable`).
